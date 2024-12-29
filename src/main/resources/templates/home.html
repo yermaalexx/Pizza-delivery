@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Pizza Delivery</title>
+        <link rel="stylesheet" th:href="@{/styles.css}" />
+    </head>
+    <body>
+        <h1>Welcome to Pizza Delivery</h1>
+        <img th:src="@{/images/Pizza.png}"/>
+        <br/>
+        <br/>
+        <button><a th:href="@{/design}">Design your pizza</a></button>
+        <button><a th:href="@{/register}">Register</a></button>
+        <button><a th:href="@{/login}">Login</a></button>
+    </body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Pizza Delivery</title>
+        <link rel="stylesheet" th:href="@{/styles.css}" />
+    </head>
+
+    <body>
+        <h1>Design your pizza!</h1>
+        <h2>Feelin' hungry, <span th:text="${user.username}">NAME</span>?</h2>
+        <span class="admin"
+              th:if="${user.isAdmin()}">
+            <a th:href="@{/v1/admin}">Admin page</a><br/><br/>
+        </span>
+        <div class="image-container">
+            <img th:src="@{/images/Pizza.png}" />
+        </div>
+
+        <br/>
+
+        <form th:method="POST" th:object="${pizza}" th:action="@{/design}" id="pizzaForm">
+            <div class="grid">
+                <div class="ingredient-group" id="meat">
+                    <h3>Select meat:</h3>
+                    <div th:each="ingredient : ${meat}">
+                        <input th:field="*{ingredients}" type="checkbox"
+                            th:value="${ingredient.name}"/>
+                        <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+                    </div>
+                </div>
+
+                <div class="ingredient-group" id="veggies">
+                    <h3>Select veggies:</h3>
+                    <div th:each="ingredient : ${veggies}">
+                        <input th:field="*{ingredients}" type="checkbox"
+                               th:value="${ingredient.name}"/>
+                        <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+                    </div>
+                </div>
+
+                <div class="ingredient-group" id="cheese">
+                    <h3>Select cheese:</h3>
+                    <div th:each="ingredient : ${cheese}">
+                        <input th:field="*{ingredients}" type="checkbox"
+                               th:value="${ingredient.name}"/>
+                        <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+                    </div>
+                </div>
+
+                <div class="ingredient-group" id="sauce">
+                    <h3>Select sauce:</h3>
+                    <div th:each="ingredient : ${sauce}">
+                        <input th:field="*{ingredients}" type="checkbox"
+                               th:value="${ingredient.name}"/>
+                        <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+                    </div>
+                </div>
+
+            </div>
+            <br/>
+
+            <span class="validationError"
+                  th:if="${#fields.hasErrors('ingredients')}"
+                  th:errors="*{ingredients}">Ingredients error</span>
+
+            <h3>Select size of your pizza:</h3>
+            <div th:each="size : ${sizes}">
+                <input type="radio" th:field="*{size}" th:value="${size}">
+                <span th:text="${size}"/>
+            </div>
+            <span class="validationError"
+                  th:if="${#fields.hasErrors('size')}"
+                  th:errors="*{size}">Size error</span>
+            <br/>
+
+            <div>
+                <h3>Name your pizza:</h3>
+                <input type="text" th:field="*{name}"/>
+                <span class="validationError"
+                      th:if="${#fields.hasErrors('name')}"
+                      th:errors="*{name}">Name error</span>
+                <br/>
+                <br/>
+
+                <button>Submit Your Pizza</button>
+            </div>
+        </form>
+        <br/>
+        <form method="POST" th:action="@{/logout}">
+            <input type="submit" value="Logout"/>
+        </form>
+
+    </body>
+</html>

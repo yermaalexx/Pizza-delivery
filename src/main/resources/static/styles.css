@@ -1,0 +1,54 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #90EE90;
+    color: #333;
+}
+
+.validationError {
+    color: #d9534f; /* Червоний для повідомлень про помилки */
+}
+
+h1, h2, h3 {
+    font-family: 'Lobster', cursive;
+    color: #006400;
+}
+
+button {
+    background-color: #5cb85c; /* Зелений колір */
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #006400; /* Темніший зелений при наведенні */
+}
+
+div.ingredient-group:nth-child(odd) {
+    float: left;
+    padding-right: 20px;
+}
+
+div.ingredient-group:nth-child(even) {
+    float: left;
+    padding-right: 0;
+}
+
+div.ingredient-group {
+    width: 25%;
+}
+
+.grid:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+*, *:after, *:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
