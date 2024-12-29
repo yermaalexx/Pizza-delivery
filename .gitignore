@@ -8,6 +8,10 @@ target/classes/*
 logs/
 *.log
 
+_toDel
+
+
+
 ### STS ###
 .apt_generated
 .classpath
