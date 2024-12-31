@@ -70,8 +70,7 @@ public class UserApp implements UserDetails {
 
     @Override
     public String toString() {
-        String str = "name: "+username+"; authority: "+authority+"; phone: "+phone+"; street: "+street+"; house: "+house;
-        return str;
+        return "name: "+username+"; authority: "+authority+"; phone: "+phone+"; street: "+street+"; house: "+house;
     }
 
     public boolean isAdmin() {
