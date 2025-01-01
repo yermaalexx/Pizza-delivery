@@ -37,12 +37,7 @@ public class PizzaOrder implements Serializable {
     }
 
     public void removePizzasByDate(List<String> listToRemove) {
-        Iterator<Pizza> iterator = pizzas.iterator();
-        while(iterator.hasNext()) {
-            Pizza pizza = iterator.next();
-            if(listToRemove.contains(pizza.getCreatedAt().toString()))
-                iterator.remove();
-        }
+        pizzas.removeIf(pizza -> listToRemove.contains(pizza.getCreatedAt().toString()));
     }
 
     public boolean hasNoPizzas() {
@@ -53,8 +48,10 @@ public class PizzaOrder implements Serializable {
     public String toString() {
         StringBuilder str = new StringBuilder("name: "+deliveryName+", phone: "+deliveryPhone
                 +", street: "+deliveryStreet+", house: "+deliveryHouse+", pizzas ("+pizzas.size()+"): ");
-        for(Pizza pizza : pizzas)
-            str.append(pizza.getId()+", ");
+        for(Pizza pizza : pizzas) {
+            str.append(pizza.getId());
+            str.append(", ");
+        }
         str.replace(str.length()-2, str.length(), ";");
 
         return str.toString();

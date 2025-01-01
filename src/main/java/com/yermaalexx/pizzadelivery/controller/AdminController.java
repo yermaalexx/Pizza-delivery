@@ -43,14 +43,7 @@ public class AdminController {
 
     @ModelAttribute(name = "ingredientsToDisplay")
     public ObjectsToDisplay ingredientsDisplay(Model model) {
-        ingredientsToDisplay.setCount(ingredientRepository.count());
-        int totalPages = (int)ingredientsToDisplay.getCount()/ingredientsToDisplay.getItemsOnPage();
-        if((int)ingredientsToDisplay.getCount()%ingredientsToDisplay.getItemsOnPage()!=0
-            || ingredientsToDisplay.getCount()==0)
-            totalPages++;
-        ingredientsToDisplay.setTotalPages(totalPages);
-        if(ingredientsToDisplay.getPage() > ingredientsToDisplay.getTotalPages())
-            ingredientsToDisplay.setPage(ingredientsToDisplay.getTotalPages());
+        ingredientsToDisplay.setPages(ingredientRepository);
 
         PageRequest pageRequest = PageRequest.of(ingredientsToDisplay.getPage()-1,
                 ingredientsToDisplay.getItemsOnPage(),
@@ -63,14 +56,7 @@ public class AdminController {
 
     @ModelAttribute(name = "usersToDisplay")
     public ObjectsToDisplay usersDisplay(Model model) {
-        usersToDisplay.setCount(userRepository.count());
-        int totalPages = (int)usersToDisplay.getCount()/usersToDisplay.getItemsOnPage();
-        if((int)usersToDisplay.getCount()%usersToDisplay.getItemsOnPage()!=0
-                || usersToDisplay.getCount()==0)
-            totalPages++;
-        usersToDisplay.setTotalPages(totalPages);
-        if(usersToDisplay.getPage() > usersToDisplay.getTotalPages())
-            usersToDisplay.setPage(usersToDisplay.getTotalPages());
+        usersToDisplay.setPages(userRepository);
 
         PageRequest pageRequest = PageRequest.of(usersToDisplay.getPage()-1,
                 usersToDisplay.getItemsOnPage(),
@@ -83,14 +69,7 @@ public class AdminController {
 
     @ModelAttribute(name = "ordersToDisplay")
     public ObjectsToDisplay ordersDisplay(Model model) {
-        ordersToDisplay.setCount(orderRepository.count());
-        int totalPages = (int)ordersToDisplay.getCount()/ordersToDisplay.getItemsOnPage();
-        if((int)ordersToDisplay.getCount()%ordersToDisplay.getItemsOnPage()!=0
-                || ordersToDisplay.getCount()==0)
-            totalPages++;
-        ordersToDisplay.setTotalPages(totalPages);
-        if(ordersToDisplay.getPage() > ordersToDisplay.getTotalPages())
-            ordersToDisplay.setPage(ordersToDisplay.getTotalPages());
+        ordersToDisplay.setPages(orderRepository);
 
         PageRequest pageRequest = PageRequest.of(ordersToDisplay.getPage()-1,
                 ordersToDisplay.getItemsOnPage(),
@@ -131,6 +110,7 @@ public class AdminController {
     @PostMapping("/ingredients/add")
     public String addIngredient(@ModelAttribute ObjectsToDisplay ingredientsToDisplay) {
         if(ingredientsToDisplay.getIngredientName()!=null
+                && !ingredientsToDisplay.getIngredientName().isBlank()
                 && ingredientsToDisplay.getIngredientType()!=null) {
             Ingredient ingredient = new Ingredient(ingredientsToDisplay.getIngredientName(),
                     ingredientsToDisplay.getIngredientType());

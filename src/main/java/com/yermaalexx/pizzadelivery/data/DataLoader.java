@@ -18,9 +18,7 @@ public class DataLoader {
     public CommandLineRunner dataLoaderForIngredient(IngredientRepository repo,
                                                      UserRepository userRepository,
                                                      PasswordEncoder encoder) {
-        return new CommandLineRunner() {
-            @Override
-            public void run(String... args) throws Exception {
+        return (args) -> {
                 repo.save(new Ingredient("Chicken", Ingredient.Type.MEAT));
                 repo.save(new Ingredient("Ham", Ingredient.Type.MEAT));
                 repo.save(new Ingredient("Sausages", Ingredient.Type.MEAT));
@@ -39,7 +37,6 @@ public class DataLoader {
                 userRepository.save(new UserApp("admin", encoder.encode("admin"),
                         "-", "-", "-",
                         "ADMIN"));
-            }
-        };
-    }
+            };
+        }
 }

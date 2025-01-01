@@ -11,6 +11,5 @@ public interface IngredientRepository extends PagingAndSortingRepository<Ingredi
         ListCrudRepository<Ingredient, UUID> {
     List<Ingredient> findAllByType(Ingredient.Type type);
     List<Ingredient> findAll();
-    String findNameById(UUID id);
 
 }

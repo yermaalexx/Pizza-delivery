@@ -12,9 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Data
@@ -35,7 +33,8 @@ public class UserApp implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_"+authority));
+        String role = "ROLE_" + Objects.requireNonNull(authority, "Authority must not be null");
+        return Collections.singletonList(new SimpleGrantedAuthority(role));
     }
 
     @Override
@@ -74,6 +73,6 @@ public class UserApp implements UserDetails {
     }
 
     public boolean isAdmin() {
-        return authority.equals("ADMIN");
+        return "ADMIN".equalsIgnoreCase(authority);
     }
 }

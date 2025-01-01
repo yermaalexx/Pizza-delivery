@@ -63,8 +63,9 @@ public class OrderController {
         if(pizzasToDisplay.getListToRemove().isEmpty())
             return "redirect:/orders/current";
         PizzaOrder pizzaOrder = ((PizzaOrder)model.getAttribute("pizzaOrder"));
-        pizzaOrder.removePizzasByDate(pizzasToDisplay.getListToRemove());
-        if(pizzaOrder.hasNoPizzas())
+        if(pizzaOrder != null)
+            pizzaOrder.removePizzasByDate(pizzasToDisplay.getListToRemove());
+        if(pizzaOrder==null || pizzaOrder.hasNoPizzas())
             return "redirect:/design";
         else
             return "redirect:/orders/current";
