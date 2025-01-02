@@ -35,11 +35,13 @@ public class Pizza {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder("name: "+name+", size: "+size+", ingredients: ");
-        for(String ingredient : ingredients) {
-            str.append(ingredient);
-            str.append(", ");
+        if(ingredients != null) {
+            for(String ingredient : ingredients) {
+                str.append(ingredient);
+                str.append(", ");
+            }
+            str.replace(str.length()-2, str.length(), ";");
         }
-        str.replace(str.length()-2, str.length(), ";");
 
         return str.toString();
 

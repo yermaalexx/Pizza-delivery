@@ -48,11 +48,13 @@ public class PizzaOrder implements Serializable {
     public String toString() {
         StringBuilder str = new StringBuilder("name: "+deliveryName+", phone: "+deliveryPhone
                 +", street: "+deliveryStreet+", house: "+deliveryHouse+", pizzas ("+pizzas.size()+"): ");
-        for(Pizza pizza : pizzas) {
-            str.append(pizza.getId());
-            str.append(", ");
+        if(pizzas != null) {
+            for(Pizza pizza : pizzas) {
+                str.append(pizza.getId());
+                str.append(", ");
+            }
+            str.replace(str.length()-2, str.length(), ";");
         }
-        str.replace(str.length()-2, str.length(), ";");
 
         return str.toString();
 
