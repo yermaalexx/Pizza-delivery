@@ -62,7 +62,7 @@ public class OrderController {
     public String deleteIngredient(@ModelAttribute ObjectsToDisplay pizzasToDisplay, Model model) {
         if(pizzasToDisplay.getListToRemove().isEmpty())
             return "redirect:/orders/current";
-        PizzaOrder pizzaOrder = ((PizzaOrder)model.getAttribute("pizzaOrder"));
+        PizzaOrder pizzaOrder = (PizzaOrder)model.getAttribute("pizzaOrder");
         if(pizzaOrder != null)
             pizzaOrder.removePizzasByDate(pizzasToDisplay.getListToRemove());
         if(pizzaOrder==null || pizzaOrder.hasNoPizzas())
