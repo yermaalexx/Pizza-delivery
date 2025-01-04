@@ -2,13 +2,17 @@ package com.yermaalexx.pizzadelivery.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.*;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class PizzaOrder implements Serializable {
 
     @Id

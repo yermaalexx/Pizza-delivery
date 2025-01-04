@@ -6,7 +6,6 @@ import com.yermaalexx.pizzadelivery.model.UserApp;
 import com.yermaalexx.pizzadelivery.repository.IngredientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,25 +45,14 @@ public class DesignPizzaControllerTest {
     }
 
     @BeforeEach
-    void setUpUser(TestInfo testInfo) {
-        if(testInfo.getDisplayName().equals("testAccessDeniedForUnauthenticatedUser")) {
-            SecurityContextHolder.getContext().setAuthentication(null);
-        } else if(testInfo.getDisplayName().equals("testAccessAllowedForAdminRole")) {
-            UserApp mockUser = new UserApp("admin", encoder.encode("admin"),
-                    "-", "-", "-", "ADMIN");
-            SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(mockUser, null,
-                            List.of(new SimpleGrantedAuthority("ROLE_ADMIN")))
-            );
-        } else {
-            UserApp mockUser = new UserApp("user", encoder.encode("pass"),
-                    "777-77-77", "Street", "007",
-                    "USER");
-            SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(mockUser, null,
-                            List.of(new SimpleGrantedAuthority("ROLE_USER")))
-            );
-        }
+    void setUpUser() {
+        UserApp mockUser = new UserApp("user", encoder.encode("pass"),
+                "777-77-77", "Street", "007",
+                "USER");
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(mockUser, null,
+                        List.of(new SimpleGrantedAuthority("ROLE_USER")))
+        );
     }
 
     @Test
@@ -84,6 +72,12 @@ public class DesignPizzaControllerTest {
 
     @Test
     void testAccessAllowedForAdminRole() throws Exception {
+        UserApp mockUser = new UserApp("admin", encoder.encode("admin"),
+                "-", "-", "-", "ADMIN");
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(mockUser, null,
+                        List.of(new SimpleGrantedAuthority("ROLE_ADMIN")))
+        );
         mockMvc.perform(get("/design"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("design"));
