@@ -1,6 +1,7 @@
 package com.yermaalexx.pizzadelivery.model;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.ListCrudRepository;
 
 import java.util.ArrayList;
@@ -17,10 +18,18 @@ public class ObjectsToDisplay {
     private String ingredientName;
     private Ingredient.Type ingredientType;
 
+    public ObjectsToDisplay(int itemsOnPage) {
+        this.listToRemove = new ArrayList<>();
+        this.count = 0;
+        this.itemsOnPage = itemsOnPage;
+        this.page = 1;
+        this.totalPages = 0;
+    }
+
     public ObjectsToDisplay() {
         this.listToRemove = new ArrayList<>();
         this.count = 0;
-        this.itemsOnPage = 5;
+        this.itemsOnPage = 10;
         this.page = 1;
         this.totalPages = 0;
     }

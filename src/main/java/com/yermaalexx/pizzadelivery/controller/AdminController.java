@@ -1,5 +1,6 @@
 package com.yermaalexx.pizzadelivery.controller;
 
+import com.yermaalexx.pizzadelivery.config.AppConfig;
 import com.yermaalexx.pizzadelivery.model.Ingredient;
 import com.yermaalexx.pizzadelivery.model.ObjectsToDisplay;
 import com.yermaalexx.pizzadelivery.model.UserApp;
@@ -32,13 +33,15 @@ public class AdminController {
 
     public AdminController(IngredientRepository ingredientRepository,
                            UserRepository userRepository,
-                           OrderRepository orderRepository) {
+                           OrderRepository orderRepository,
+                           AppConfig appConfig) {
         this.ingredientRepository = ingredientRepository;
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
-        this.ingredientsToDisplay = new ObjectsToDisplay();
-        this.usersToDisplay = new ObjectsToDisplay();
-        this.ordersToDisplay = new ObjectsToDisplay();
+        int itemsOnPage = appConfig.getItemsOnPage();
+        this.ingredientsToDisplay = new ObjectsToDisplay(itemsOnPage);
+        this.usersToDisplay = new ObjectsToDisplay(itemsOnPage);
+        this.ordersToDisplay = new ObjectsToDisplay(itemsOnPage);
     }
 
     @ModelAttribute(name = "ingredientsToDisplay")
