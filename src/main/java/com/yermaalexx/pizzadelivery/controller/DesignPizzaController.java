@@ -6,6 +6,7 @@ import com.yermaalexx.pizzadelivery.model.PizzaOrder;
 import com.yermaalexx.pizzadelivery.model.UserApp;
 import com.yermaalexx.pizzadelivery.repository.IngredientRepository;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import java.util.Date;
 @Controller
 @RequestMapping("/design")
 @SessionAttributes("pizzaOrder")
+@Slf4j
 public class DesignPizzaController {
 
     private final IngredientRepository ingredientRepository;
@@ -53,18 +55,22 @@ public class DesignPizzaController {
     }
 
     @GetMapping
-    public String showDesignForm() {
+    public String showDesignForm(@AuthenticationPrincipal UserApp user) {
+        log.debug("Showing pizza design form, username: {}", user.getUsername());
         return "design";
     }
 
     @PostMapping
     public String processPizza(@Valid Pizza pizza, Errors errors,
                                @ModelAttribute PizzaOrder pizzaOrder) {
+        log.info("Processing pizza: {}", pizza);
         if(errors.hasErrors()) {
+            log.warn("Validation errors encountered: {}", errors.getAllErrors());
             return "design";
         }
         pizza.setCreatedAt(new Date());
         pizzaOrder.addPizza(pizza);
+        log.info("Pizza added to order: {}", pizza);
 
         return "redirect:/orders/current";
     }
