@@ -1,7 +1,6 @@
 package com.yermaalexx.pizzadelivery.model;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.ListCrudRepository;
 
 import java.util.ArrayList;
@@ -35,14 +34,13 @@ public class ObjectsToDisplay {
     }
 
     public <T> void setPages(ListCrudRepository<T, UUID> repository) {
-        this.count = repository.count();
-        this.totalPages = (int)this.count/this.itemsOnPage;
-        if((int)this.count%this.itemsOnPage!=0
-                || this.count==0)
-            this.totalPages++;
-        if(this.page > this.totalPages)
-            this.page = this.totalPages;
-        if(this.page <= 0)
-            this.page = 1;
+        count = repository.count();
+        totalPages = (itemsOnPage==0) ? 1 : (int)count/itemsOnPage;
+        if((itemsOnPage!=0) && ((int)count%itemsOnPage!=0 || count==0))
+            totalPages++;
+        if(page > totalPages)
+            page = totalPages;
+        if(page <= 0)
+            page = 1;
     }
 }

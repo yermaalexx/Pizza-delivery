@@ -7,9 +7,11 @@ import com.yermaalexx.pizzadelivery.model.UserApp;
 import com.yermaalexx.pizzadelivery.repository.IngredientRepository;
 import com.yermaalexx.pizzadelivery.repository.OrderRepository;
 import com.yermaalexx.pizzadelivery.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +20,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/v1/admin")
+@Slf4j
 public class AdminController {
 
     private final IngredientRepository ingredientRepository;
@@ -49,11 +53,11 @@ public class AdminController {
         ingredientsToDisplay.setPages(ingredientRepository);
 
         PageRequest pageRequest = PageRequest.of(ingredientsToDisplay.getPage()-1,
-                ingredientsToDisplay.getItemsOnPage(),
+                Math.max(ingredientsToDisplay.getItemsOnPage(), 1),
                 Sort.by("type", "name").ascending());
         model.addAttribute("allIngredients",
                 ingredientRepository.findAll(pageRequest).getContent());
-
+        log.debug("Ingredients added to model");
         return ingredientsToDisplay;
     }
 
@@ -62,11 +66,11 @@ public class AdminController {
         usersToDisplay.setPages(userRepository);
 
         PageRequest pageRequest = PageRequest.of(usersToDisplay.getPage()-1,
-                usersToDisplay.getItemsOnPage(),
+                Math.max(usersToDisplay.getItemsOnPage(), 1),
                 Sort.by("authority").ascending());
         model.addAttribute("allUsers",
                 userRepository.findAll(pageRequest).getContent());
-
+        log.debug("Users added to model");
         return usersToDisplay;
     }
 
@@ -75,11 +79,11 @@ public class AdminController {
         ordersToDisplay.setPages(orderRepository);
 
         PageRequest pageRequest = PageRequest.of(ordersToDisplay.getPage()-1,
-                ordersToDisplay.getItemsOnPage(),
+                Math.max(ordersToDisplay.getItemsOnPage(), 1),
                 Sort.by("placedAt").descending());
         model.addAttribute("allOrders",
                 orderRepository.findAll(pageRequest).getContent());
-
+        log.debug("Orders added to model");
         return ordersToDisplay;
     }
 
@@ -95,29 +99,34 @@ public class AdminController {
 
     @GetMapping
     public String showAdminPage() {
+        log.debug("Current user's roles: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        log.debug("Showing Admin page");
         return "adminPage";
     }
 
     @PostMapping("/ingredients/delete")
     public String deleteIngredient(@ModelAttribute ObjectsToDisplay ingredientsToDisplay) {
+        log.info("Processing ingredients deleting: {}", Arrays.toString(ingredientsToDisplay.getListToRemove().toArray()));
         for(String str : ingredientsToDisplay.getListToRemove()) {
             UUID id = UUID.fromString(str);
             ingredientRepository.deleteById(id);
         }
         this.ingredientsToDisplay.setPage(ingredientsToDisplay.getPage());
         this.ingredientsToDisplay.setListToRemove(new ArrayList<>());
-
+        log.info("Ingredients deleted");
         return "redirect:/v1/admin";
     }
 
     @PostMapping("/ingredients/add")
     public String addIngredient(@ModelAttribute ObjectsToDisplay ingredientsToDisplay) {
+        log.info("Processing ingredient adding: {}, type: {}", ingredientsToDisplay.getIngredientName(), ingredientsToDisplay.getIngredientType());
         if(ingredientsToDisplay.getIngredientName()!=null
                 && !ingredientsToDisplay.getIngredientName().isBlank()
                 && ingredientsToDisplay.getIngredientType()!=null) {
             Ingredient ingredient = new Ingredient(ingredientsToDisplay.getIngredientName(),
                     ingredientsToDisplay.getIngredientType());
             ingredientRepository.save(ingredient);
+            log.info("Ingredients added successfully: {}, type: {}", ingredientsToDisplay.getIngredientName(), ingredientsToDisplay.getIngredientType());
         }
         ingredientsToDisplay.setIngredientName(null);
         ingredientsToDisplay.setIngredientType(null);
@@ -128,6 +137,7 @@ public class AdminController {
     @PostMapping("/users/delete")
     public String deleteUser(@ModelAttribute ObjectsToDisplay usersToDisplay,
                              @AuthenticationPrincipal UserApp user) {
+        log.info("Processing users deleting: {}", Arrays.toString(usersToDisplay.getListToRemove().toArray()));
         UUID currentId = user.getId();
         for(String str : usersToDisplay.getListToRemove()) {
             UUID id = UUID.fromString(str);
@@ -137,19 +147,20 @@ public class AdminController {
         }
         this.usersToDisplay.setPage(usersToDisplay.getPage());
         this.usersToDisplay.setListToRemove(new ArrayList<>());
-
+        log.info("Users deleted");
         return "redirect:/v1/admin";
     }
 
     @PostMapping("/orders/delete")
     public String deleteOrder(@ModelAttribute ObjectsToDisplay ordersToDisplay) {
+        log.info("Processing orders deleting: {}", Arrays.toString(ordersToDisplay.getListToRemove().toArray()));
         for(String str : ordersToDisplay.getListToRemove()) {
             UUID id = UUID.fromString(str);
             orderRepository.deleteById(id);
         }
         this.ordersToDisplay.setPage(ordersToDisplay.getPage());
         this.ordersToDisplay.setListToRemove(new ArrayList<>());
-
+        log.info("Orders deleted");
         return "redirect:/v1/admin";
     }
 

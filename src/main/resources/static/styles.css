@@ -41,6 +41,11 @@ div.ingredient-group {
     width: 25%;
 }
 
+.pizza-img {
+    width: 100%;
+    height: auto; /* Пропорційна висота */
+}
+
 .grid:after {
     content: "";
     display: table;

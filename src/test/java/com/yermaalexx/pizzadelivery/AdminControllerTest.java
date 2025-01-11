@@ -74,8 +74,7 @@ public class AdminControllerTest {
     @Test
     void testAccessDeniedForNotAdmin() throws Exception {
         UserApp mockUser = new UserApp("user", encoder.encode("pass"),
-                "777-77-77", "Street", "007",
-                "USER");
+                "777-77-77", "Street", "007", "USER");
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(mockUser, null,
                         List.of(new SimpleGrantedAuthority("ROLE_USER")))

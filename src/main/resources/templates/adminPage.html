@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Admin Page</title>
@@ -8,13 +9,13 @@
 
     <body>
         <h2>Admin name: <span th:text="${user.username}">NAME</span></h2>
-        <br/>
+        <br>
         <form method="POST" th:action="@{/logout}">
             <input type="submit" value="Logout"/>
         </form>
-        <br/>
+        <br>
         <a th:href="@{/design}" id="design">Design your pizza</a>
-        <br/>
+        <br>
 
         <hr>
 
@@ -26,30 +27,44 @@
         </p>
 
         <form th:method="POST" th:object="${ingredientsToDisplay}" th:action="@{/v1/admin/ingredients/delete}" id="ingredientDeleting">
-            <p>Go to page: <input th:field="*{page}" type="number"/></p>
+            <p>Go to page:
+                <label>
+                    <input th:field="*{page}" type="number"/>
+                </label>
+            </p>
             <p>Check ingredient to delete: </p>
             <div th:each="ingredient : ${allIngredients}">
-                <input th:field="*{listToRemove}" type="checkbox" th:value="${ingredient.id.toString()}"/>
-                <span th:text="${ingredient.id}"/>
-                <span th:text="${ingredient.name}"/>
-                <span th:text="${ingredient.type}"/><br/>
+                <label>
+                    <input th:field="*{listToRemove}" type="checkbox"
+                           th:value="${ingredient.id.toString()}"/>
+                    <span th:text="${ingredient.id}"/>
+                    <span th:text="${ingredient.name}"/>
+                    <span th:text="${ingredient.type}"/>
+                    <br>
+                </label>
             </div>
-            </br>
+            <br>
             <button>Submit Deleting</button>
-        </form></br>
+        </form>
+        <br>
 
         <form th:method="POST" th:object="${ingredientsToDisplay}" th:action="@{/v1/admin/ingredients/add}" id="ingredientAdding">
             <p>Add ingredient: </p>
             <div>
-                <span>Name: </span></br>
-                <input th:field="*{ingredientName}" type="text"/></br>
-                <span>Type: </span></br>
+                <span>Name: </span><br>
+                <label>
+                    <input th:field="*{ingredientName}" type="text"/>
+                    <br>
+                </label>
+                <span>Type: </span><br>
                 <div th:each="type : ${ingredientTypes}">
-                    <input type="radio" th:field="*{ingredientType}" th:value="${type}">
-                    <span th:text="${type}"/>
+                    <label>
+                        <input type="radio" th:field="*{ingredientType}" th:value="${type}">
+                        <span th:text="${type}"/>
+                    </label>
                 </div>
             </div>
-            </br>
+            <br>
             <button>Submit Adding</button>
         </form>
 
@@ -57,42 +72,59 @@
 
         <h3>All users:</h3>
         <p>
-            Total users: <span th:text="${usersToDisplay.count}"/><br/>
+            Total users: <span th:text="${usersToDisplay.count}"/>
+            <br>
             Page: <span th:text="${usersToDisplay.page}"/> from
             <span th:text="${usersToDisplay.totalPages}"/> pages
         </p>
         <form th:method="POST" th:object="${usersToDisplay}" th:action="@{/v1/admin/users/delete}" id="userDeleting">
-            <p>Go to page: <input th:field="*{page}" type="number"/></p>
+            <p>Go to page:
+                <label>
+                    <input th:field="*{page}" type="number"/>
+                </label>
+            </p>
             <p>Check user to delete: </p>
             <div th:each="user : ${allUsers}">
-                <input th:field="*{listToRemove}" type="checkbox" th:value="${user.id.toString()}"/>
-                <span th:text="${user.id}"/>
-                <span th:text="${user}"/><br/>
+                <label>
+                    <input th:field="*{listToRemove}" type="checkbox" th:value="${user.id.toString()}"/>
+                    <span th:text="${user.id}"/>
+                    <span th:text="${user}"/>
+                    <br>
+                </label>
             </div>
-            </br>
+            <br>
             <button>Submit Deleting</button>
-        </form></br>
+        </form>
+        <br>
 
         <hr>
 
         <h3>All orders:</h3>
         <p>
-            Total orders: <span th:text="${ordersToDisplay.count}"/><br/>
+            Total orders: <span th:text="${ordersToDisplay.count}"/>
+            <br>
             Page: <span th:text="${ordersToDisplay.page}"/> from
             <span th:text="${ordersToDisplay.totalPages}"/> pages
         </p>
         <form th:method="POST" th:object="${ordersToDisplay}" th:action="@{/v1/admin/orders/delete}" id="orderDeleting">
-            <p>Go to page: <input th:field="*{page}" type="number"/></p>
+            <p>Go to page:
+                <label>
+                    <input th:field="*{page}" type="number"/>
+                </label>
+            </p>
             <p>Check order to delete: </p>
             <div th:each="order : ${allOrders}">
-                <input th:field="*{listToRemove}" type="checkbox" th:value="${order.id.toString()}"/>
-                <span th:text="${order.id}"/>
-                <span th:text="${order.placedAt}"/>
-                <span th:text="${order}"/><br/>
+                <label>
+                    <input th:field="*{listToRemove}" type="checkbox" th:value="${order.id.toString()}"/>
+                    <span th:text="${order.id}"/>
+                    <span th:text="${order.placedAt}"/>
+                    <span th:text="${order}"/>
+                    <br>
+                </label>
             </div>
-            </br>
+            <br>
             <button>Submit Deleting</button>
-        </form></br>
+        </form><br>
 
 
     </body>
