@@ -41,14 +41,15 @@ public class OrderController {
     @GetMapping("/current")
     public String orderForm(@AuthenticationPrincipal UserApp user,
                             @ModelAttribute PizzaOrder pizzaOrder) {
-        log.debug("Showing Pizza order form, username: {}", user.getUsername());
-        if(pizzaOrder.getDeliveryName() == null)
+        String username = (user==null) ? " " : user.getUsername();
+        log.debug("Showing Pizza order form, username: {}", username);
+        if(pizzaOrder.getDeliveryName()==null && user!=null)
             pizzaOrder.setDeliveryName(user.getUsername());
-        if(pizzaOrder.getDeliveryPhone() == null)
+        if(pizzaOrder.getDeliveryPhone()==null && user!=null)
             pizzaOrder.setDeliveryPhone(user.getPhone());
-        if(pizzaOrder.getDeliveryStreet() == null)
+        if(pizzaOrder.getDeliveryStreet()==null && user!=null)
             pizzaOrder.setDeliveryStreet(user.getStreet());
-        if(pizzaOrder.getDeliveryHouse() == null)
+        if(pizzaOrder.getDeliveryHouse()==null && user!=null)
             pizzaOrder.setDeliveryHouse(user.getHouse());
 
         return "orderForm";

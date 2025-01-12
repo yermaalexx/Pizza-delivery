@@ -57,7 +57,7 @@ public class AdminController {
                 Sort.by("type", "name").ascending());
         model.addAttribute("allIngredients",
                 ingredientRepository.findAll(pageRequest).getContent());
-        log.debug("Ingredients added to model");
+        log.trace("Ingredients added to model");
         return ingredientsToDisplay;
     }
 
@@ -70,7 +70,7 @@ public class AdminController {
                 Sort.by("authority").ascending());
         model.addAttribute("allUsers",
                 userRepository.findAll(pageRequest).getContent());
-        log.debug("Users added to model");
+        log.trace("Users added to model");
         return usersToDisplay;
     }
 
@@ -83,13 +83,13 @@ public class AdminController {
                 Sort.by("placedAt").descending());
         model.addAttribute("allOrders",
                 orderRepository.findAll(pageRequest).getContent());
-        log.debug("Orders added to model");
+        log.trace("Orders added to model");
         return ordersToDisplay;
     }
 
-    @ModelAttribute(name = "user")
-    public UserApp user(@AuthenticationPrincipal UserApp user) {
-        return user;
+    @ModelAttribute(name = "username")
+    public String user(@AuthenticationPrincipal UserApp user) {
+        return (user==null) ? " " : user.getUsername();
     }
 
     @ModelAttribute(name = "ingredientTypes")
@@ -99,7 +99,7 @@ public class AdminController {
 
     @GetMapping
     public String showAdminPage() {
-        log.debug("Current user's roles: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        log.trace("Current user's roles: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         log.debug("Showing Admin page");
         return "adminPage";
     }
@@ -107,13 +107,15 @@ public class AdminController {
     @PostMapping("/ingredients/delete")
     public String deleteIngredient(@ModelAttribute ObjectsToDisplay ingredientsToDisplay) {
         log.info("Processing ingredients deleting: {}", Arrays.toString(ingredientsToDisplay.getListToRemove().toArray()));
+        int deleted = 0;
         for(String str : ingredientsToDisplay.getListToRemove()) {
             UUID id = UUID.fromString(str);
             ingredientRepository.deleteById(id);
+            deleted++;
         }
         this.ingredientsToDisplay.setPage(ingredientsToDisplay.getPage());
         this.ingredientsToDisplay.setListToRemove(new ArrayList<>());
-        log.info("Ingredients deleted");
+        log.info("Ingredients deleted: {}", deleted);
         return "redirect:/v1/admin";
     }
 
@@ -135,32 +137,34 @@ public class AdminController {
     }
 
     @PostMapping("/users/delete")
-    public String deleteUser(@ModelAttribute ObjectsToDisplay usersToDisplay,
-                             @AuthenticationPrincipal UserApp user) {
+    public String deleteUser(@ModelAttribute ObjectsToDisplay usersToDisplay) {
         log.info("Processing users deleting: {}", Arrays.toString(usersToDisplay.getListToRemove().toArray()));
-        UUID currentId = user.getId();
+        int deleted = 0;
         for(String str : usersToDisplay.getListToRemove()) {
             UUID id = UUID.fromString(str);
-            if(currentId.equals(id))
+            if(userRepository.findById(id).isEmpty() || userRepository.findById(id).get().isAdmin())
                 continue;
             userRepository.deleteById(id);
+            deleted++;
         }
         this.usersToDisplay.setPage(usersToDisplay.getPage());
         this.usersToDisplay.setListToRemove(new ArrayList<>());
-        log.info("Users deleted");
+        log.info("Users deleted: {}", deleted);
         return "redirect:/v1/admin";
     }
 
     @PostMapping("/orders/delete")
     public String deleteOrder(@ModelAttribute ObjectsToDisplay ordersToDisplay) {
         log.info("Processing orders deleting: {}", Arrays.toString(ordersToDisplay.getListToRemove().toArray()));
+        int deleted = 0;
         for(String str : ordersToDisplay.getListToRemove()) {
             UUID id = UUID.fromString(str);
             orderRepository.deleteById(id);
+            deleted++;
         }
         this.ordersToDisplay.setPage(ordersToDisplay.getPage());
         this.ordersToDisplay.setListToRemove(new ArrayList<>());
-        log.info("Orders deleted");
+        log.info("Orders deleted: {}", deleted);
         return "redirect:/v1/admin";
     }
 

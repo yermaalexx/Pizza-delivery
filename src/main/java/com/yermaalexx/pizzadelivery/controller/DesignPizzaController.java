@@ -49,14 +49,20 @@ public class DesignPizzaController {
         return Pizza.SizeOfPizza.values();
     }
 
-    @ModelAttribute(name = "user")
-    public UserApp user(@AuthenticationPrincipal UserApp user) {
-        return user;
+    @ModelAttribute(name = "username")
+    public String user(@AuthenticationPrincipal UserApp user) {
+        return (user==null) ? " " : user.getUsername();
+    }
+
+    @ModelAttribute(name = "isAdmin")
+    public boolean isAdmin(@AuthenticationPrincipal UserApp user) {
+        return (user!=null) && user.isAdmin();
     }
 
     @GetMapping
     public String showDesignForm(@AuthenticationPrincipal UserApp user) {
-        log.debug("Showing pizza design form, username: {}", user.getUsername());
+        String username = (user==null) ? " " : user.getUsername();
+        log.debug("Showing pizza design form, username: {}", username);
         return "design";
     }
 

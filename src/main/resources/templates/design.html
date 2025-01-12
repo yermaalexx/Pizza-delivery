@@ -11,9 +11,9 @@
         <img src="/images/Pizza.png" class="pizza-img" alt="Delicious pizza"/>
         <br>
         <h1>Design your pizza!</h1>
-        <h2>Feelin' hungry, <span th:text="${user.username}">NAME</span>?</h2>
+        <h2>Feelin' hungry, <span th:text="${username}">NAME</span>?</h2>
         <span class="admin"
-              th:if="${user.isAdmin()}">
+              th:if="${isAdmin}">
             <a th:href="@{/v1/admin}">Admin page</a>
             <br>
             <br>

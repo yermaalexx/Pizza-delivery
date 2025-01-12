@@ -8,7 +8,7 @@
     </head>
 
     <body>
-        <h2>Admin name: <span th:text="${user.username}">NAME</span></h2>
+        <h2>Admin name: <span th:text="${username}">NAME</span></h2>
         <br>
         <form method="POST" th:action="@{/logout}">
             <input type="submit" value="Logout"/>
