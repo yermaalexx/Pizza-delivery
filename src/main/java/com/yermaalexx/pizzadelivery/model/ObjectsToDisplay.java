@@ -20,7 +20,7 @@ public class ObjectsToDisplay {
     public ObjectsToDisplay(int itemsOnPage) {
         this.listToRemove = new ArrayList<>();
         this.count = 0;
-        this.itemsOnPage = itemsOnPage;
+        this.itemsOnPage = Math.max(3, itemsOnPage);
         this.page = 1;
         this.totalPages = 0;
     }
