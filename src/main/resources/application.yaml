@@ -1,14 +1,13 @@
 app:
-  items-on-page: 6
+  items-on-page: ${ITEMS_ON_PAGE:10}
+  admin-name: ${ADMIN_NAME:admin}
+  admin-pass: ${ADMIN_PASS:admin}
 
 server:
   port: 8080
 
 spring:
-  datasource:
-    url: jdbc:h2:mem:pizza
-    username: name
-    password: pass
-  h2:
-    console:
-      enabled: true
+  jpa:
+    open-in-view: true
+  profiles:
+    default: h2

@@ -9,5 +9,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "app")
 public class AppConfig {
     private int itemsOnPage;
+    private String adminName;
+    private String adminPass;
 
 }

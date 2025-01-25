@@ -33,7 +33,7 @@ public class PizzaOrder implements Serializable {
     @NotBlank(message = "Delivery house is required")
     private String deliveryHouse;
 
-    @OneToMany(cascade = CascadeType.ALL)//, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Pizza> pizzas = new ArrayList<>();
 
     public void addPizza(Pizza pizza) {
