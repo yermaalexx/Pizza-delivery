@@ -9,5 +9,5 @@ import java.util.UUID;
 public interface UserRepository extends PagingAndSortingRepository<UserApp, UUID>,
         ListCrudRepository<UserApp, UUID> {
     UserApp findByUsername(String username);
-    void deleteById(UUID id);
+    boolean existsByUsername(String username);
 }

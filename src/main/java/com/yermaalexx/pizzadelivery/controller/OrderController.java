@@ -10,11 +10,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/orders")
@@ -60,7 +62,7 @@ public class OrderController {
                                SessionStatus sessionStatus) {
         log.info("Processing order: {}", pizzaOrder);
         if(errors.hasErrors()) {
-            log.warn("Validation errors encountered: {}", errors.getAllErrors());
+            log.warn("Validation errors encountered: {}", errors.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.toList()));
             return "orderForm";
         }
         pizzaOrder.setPlacedAt(new Date());

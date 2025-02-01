@@ -5,6 +5,8 @@ import com.yermaalexx.pizzadelivery.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -54,12 +56,12 @@ public class SecurityConfig {
     }
 
     private void configureCsrf(HttpSecurity http) throws Exception {
-        http.csrf(csrfConfigurer -> csrfConfigurer.disable());
+        http.csrf(AbstractHttpConfigurer::disable);
     }
 
     private void configureHeaders(HttpSecurity http) throws Exception {
         http.headers(headersConfigurer -> headersConfigurer
-                .frameOptions(frameOptionsConfig -> frameOptionsConfig.sameOrigin()));
+                .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
     }
 
     private void configureLogout(HttpSecurity http) throws Exception {

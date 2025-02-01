@@ -7,10 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/register")
@@ -38,8 +41,18 @@ public class RegistrationController {
     @PostMapping
     public String processRegistration(@Valid RegistrationForm form, Errors errors) {
         log.info("Processing registration");
-        if(errors.hasErrors() || !form.getPassword().equals(form.getConfirm())) {
-            log.warn("Validation errors encountered: {}", errors.getAllErrors());
+        if(errors.hasErrors()) {
+            log.warn("Validation errors encountered: {}", errors.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.toList()));
+            return "registration";
+        }
+        if(userRepository.existsByUsername(form.getUsername())) {
+            log.warn("User with this name already exists: {}", form.getUsername());
+            errors.rejectValue("username", "error.username", "User with this name already exists");
+            return "registration";
+        }
+        if(!form.getPassword().equals(form.getConfirm())) {
+            log.warn("Fields 'Password' and 'Confirm password' are not the same");
+            errors.rejectValue("confirm", "error.confirm", "Fields 'Password' and 'Confirm password' are not the same");
             return "registration";
         }
         userRepository.save(form.toUser(passwordEncoder));

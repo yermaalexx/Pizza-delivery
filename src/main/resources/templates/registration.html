@@ -33,6 +33,9 @@
         <label>Confirm password: </label>
         <label>
             <input type="password" name="confirm"/>
+            <span class="validationError"
+                  th:if="${#fields.hasErrors('confirm')}"
+                  th:errors="*{confirm}">Confirm error</span>
         </label>
         <br>
 

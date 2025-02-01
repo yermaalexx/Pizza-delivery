@@ -11,9 +11,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/design")
@@ -71,7 +73,7 @@ public class DesignPizzaController {
                                @ModelAttribute PizzaOrder pizzaOrder) {
         log.info("Processing pizza: {}", pizza);
         if(errors.hasErrors()) {
-            log.warn("Validation errors encountered: {}", errors.getAllErrors());
+            log.warn("Validation errors encountered: {}", errors.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.toList()));
             return "design";
         }
         pizza.setCreatedAt(new Date());

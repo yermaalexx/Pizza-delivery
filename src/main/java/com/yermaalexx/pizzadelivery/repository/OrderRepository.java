@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface OrderRepository extends PagingAndSortingRepository<PizzaOrder, UUID>,
         ListCrudRepository<PizzaOrder, UUID> {
-    void deleteById(UUID id);
+
 }

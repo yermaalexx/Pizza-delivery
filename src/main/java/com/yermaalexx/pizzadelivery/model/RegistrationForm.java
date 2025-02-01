@@ -14,7 +14,7 @@ public class RegistrationForm {
     private String username;
     @NotBlank(message = "Not blanc password is required")
     private String password;
-    @NotBlank(message = "Does not match the password")
+    @NotBlank(message = "Not blanc confirm is required")
     private String confirm;
     @NotBlank(message = "Phone is required")
     private String phone;
