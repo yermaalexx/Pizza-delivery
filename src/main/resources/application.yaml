@@ -1,7 +1,7 @@
 app:
-  items-on-page: ${ITEMS_ON_PAGE:10}
+  items-on-page: ${ITEMS_ON_PAGE:20}
   admin-name: ${ADMIN_NAME:admin}
-  admin-pass: ${ADMIN_PASS:admin}
+  admin-pass: ${ADMIN_PASS:pass}
 
 server:
   port: 8080
