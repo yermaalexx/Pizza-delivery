@@ -1,0 +1,52 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout of repo
+        uses: actions/checkout@v3
+
+      - name: JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Maven-dep cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+
+      - name: Tests
+        run: mvn clean test
+
+  docker:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout of repo
+        uses: actions/checkout@v3
+
+      - name: Login Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build of Docker-image
+        run: docker build -t pizza-delivery:latest .
+
+      - name: Push to Docker Hub
+        run: |
+          docker tag pizza-delivery:latest yermaalexx/pizza-delivery:latest
+          docker push yermaalexx/pizza-delivery:latest
