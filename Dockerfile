@@ -3,16 +3,15 @@ FROM maven:3.8.4-openjdk-17 as builder
 WORKDIR /application
 
 # Завантаження залежностей (кешування)
-COPY pom.xml /application
+COPY pom.xml .
 RUN mvn dependency:go-offline -B
 
 # Копіюємо весь код і збираємо
-COPY . /application
-RUN mvn clean package -am -Dmaven.test.skip && rm -rf /application/target/test-classes
+COPY . .
+RUN mvn clean package -DskipTests
 
 # Розпакування шарів Spring Boot
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} application.jar
+COPY target/*.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 # Етап 2: Кінцевий образ
