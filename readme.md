@@ -49,6 +49,14 @@ This is a Spring Boot-based web application for ordering custom pizzas. Users ca
    ```
 2. The application will be available at `http://localhost:8080`
 
+## CI/CD Pipeline
+
+A CI/CD pipeline using GitHub Actions is implemented for automated testing and Docker image creation. The pipeline triggers on pushes and pull requests to the `master` branch and includes two jobs:
+
+- **Build & Test**: Runs tests with Maven and caches dependencies.
+
+- **Docker Image Build & Push**: Creates a Docker image and pushes it to Docker Hub.
+
 ## Screenshots
 
 ### Home page
